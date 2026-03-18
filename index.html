@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="UTF-8">
-<title>AI Pose Detection</title>
+<title>AI + Timer</title>
 
 <link rel="icon" href="data:,">
 
@@ -32,20 +32,30 @@ margin-top:20px;
 font-size:40px;
 margin-top:20px;
 font-weight:bold;
-color:#111;
+}
+
+#timerDisplay{
+font-size:40px;
+margin-top:10px;
+color:red;
+font-weight:bold;
+}
+
+input{
+padding:10px;
+font-size:16px;
+margin-top:10px;
 }
 
 button{
-
-font-size:18px;
+font-size:16px;
 padding:10px 20px;
-margin:10px;
+margin:8px;
 border:none;
 border-radius:8px;
 background:#1e40ff;
 color:white;
 cursor:pointer;
-
 }
 
 button:hover{
@@ -58,8 +68,9 @@ background:#0f2bd6;
 
 <body>
 
-<h1>AI ตรวจจับท่าทาง</h1>
+<h1>AI ตรวจจับ + นาฬิกา</h1>
 
+<!-- ปุ่มกล้อง -->
 <button onclick="init()">Start Camera</button>
 <button onclick="stopCamera()">Stop Camera</button>
 
@@ -69,16 +80,33 @@ background:#0f2bd6;
 
 <div id="result">AI ยังไม่เริ่ม</div>
 
+<hr>
+
+<!-- TIMER -->
+<h2>นาฬิกานับถอยหลัง</h2>
+
+<input type="number" id="timeInput" placeholder="ใส่วินาที เช่น 30">
+
 <br>
 
+<button onclick="startTimer()">Start Timer</button>
+<button onclick="stopTimer()">Stop Timer</button>
+
+<div id="timerDisplay">0</div>
+
+<hr>
+
+<!-- ปุ่มกลับเว็บ -->
 <button onclick="goHome()">กลับไปหน้าเว็บไซต์</button>
 
 <script>
 
-const URL = "https://teachablemachine.withgoogle.com/models/-VtSpVQ_y1/";
+const URL = "https://teachablemachine.withgoogle.com/models/e-gQIohsI/";
 
 let model, webcam, ctx;
 let running = false;
+
+// ================= AI =================
 
 async function init(){
 
@@ -109,13 +137,13 @@ ctx = canvas.getContext("2d");
 
 function stopCamera(){
 
-running=false;
+running = false;
 
 if(webcam){
 webcam.stop();
 }
 
-document.getElementById("result").innerHTML="Camera stopped";
+document.getElementById("result").innerHTML = "Camera stopped";
 
 }
 
@@ -138,13 +166,9 @@ const prediction = await model.predict(posenetOutput);
 let best = prediction[0];
 
 for(let i=0;i<prediction.length;i++){
-
 if(prediction[i].probability > best.probability){
-
 best = prediction[i];
-
 }
-
 }
 
 document.getElementById("result").innerHTML =
@@ -159,17 +183,58 @@ function drawPose(pose){
 ctx.drawImage(webcam.canvas,0,0);
 
 if(pose){
-
 tmPose.drawKeypoints(pose.keypoints,0.5,ctx);
 tmPose.drawSkeleton(pose.keypoints,0.5,ctx);
-
 }
 
 }
+
+// ================= TIMER =================
+
+let timer;
+let timeLeft = 0;
+
+function startTimer(){
+
+timeLeft = document.getElementById("timeInput").value;
+
+if(timeLeft <= 0){
+alert("กรุณาใส่เวลา");
+return;
+}
+
+clearInterval(timer);
+
+timer = setInterval(()=>{
+
+timeLeft--;
+
+document.getElementById("timerDisplay").innerHTML =
+timeLeft + " วินาที";
+
+if(timeLeft <= 0){
+
+clearInterval(timer);
+document.getElementById("timerDisplay").innerHTML = "หมดเวลา!";
+alert("หมดเวลาแล้ว!");
+
+}
+
+},1000);
+
+}
+
+function stopTimer(){
+
+clearInterval(timer);
+
+}
+
+// ================= GO HOME =================
 
 function goHome(){
 
-window.location.href="https://arobic-orange68.my.canva.site/daheh3sh7p0";
+window.location.href="https://sites.google.com/view/yousda/%E0%B8%AB%E0%B8%99%E0%B8%B2%E0%B9%81%E0%B8%A3%E0%B8%81";
 
 }
 
