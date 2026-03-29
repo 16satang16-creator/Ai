@@ -34,19 +34,6 @@ margin-top:20px;
 font-weight:bold;
 }
 
-#timerDisplay{
-font-size:40px;
-margin-top:10px;
-color:red;
-font-weight:bold;
-}
-
-input{
-padding:10px;
-font-size:16px;
-margin-top:10px;
-}
-
 button{
 font-size:16px;
 padding:10px 20px;
@@ -70,7 +57,7 @@ background:#0f2bd6;
 
 <h1>AI ตรวจจับท่าทาง</h1>
 
-<!-- ปุ่มกล้อง -->
+
 <button onclick="init()">Start Camera</button>
 <button onclick="stopCamera()">Stop Camera</button>
 
@@ -82,21 +69,7 @@ background:#0f2bd6;
 
 <hr>
 
-<!-- TIMER -->
-<h2>นาฬิกานับถอยหลัง</h2>
 
-<input type="number" id="timeInput" placeholder="ใส่วินาที เช่น 30">
-
-<br>
-
-<button onclick="startTimer()">Start Timer</button>
-<button onclick="stopTimer()">Stop Timer</button>
-
-<div id="timerDisplay">0</div>
-
-<hr>
-
-<!-- ปุ่มกลับเว็บ -->
 <button onclick="goHome()">กลับไปหน้าเว็บไซต์</button>
 
 <script>
@@ -106,7 +79,6 @@ const URL = "https://teachablemachine.withgoogle.com/models/-VtSpVQ_y1/";
 let model, webcam, ctx;
 let running = false;
 
-// ================= AI =================
 
 async function init(){
 
@@ -189,53 +161,9 @@ tmPose.drawSkeleton(pose.keypoints,0.5,ctx);
 
 }
 
-// ================= TIMER =================
-
-let timer;
-let timeLeft = 0;
-
-function startTimer(){
-
-timeLeft = document.getElementById("timeInput").value;
-
-if(timeLeft <= 0){
-alert("กรุณาใส่เวลา");
-return;
-}
-
-clearInterval(timer);
-
-timer = setInterval(()=>{
-
-timeLeft--;
-
-document.getElementById("timerDisplay").innerHTML =
-timeLeft + " วินาที";
-
-if(timeLeft <= 0){
-
-clearInterval(timer);
-document.getElementById("timerDisplay").innerHTML = "หมดเวลา!";
-alert("หมดเวลาแล้ว!");
-
-}
-
-},1000);
-
-}
-
-function stopTimer(){
-
-clearInterval(timer);
-
-}
-
-// ================= GO HOME =================
 
 function goHome(){
-
 window.location.href="https://sites.google.com/watpa.ac.th/smar-/อออ";
-
 }
 
 </script>
